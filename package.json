@@ -1,0 +1,12 @@
+{
+  "name": "udemy_1",
+  "version": "1.0.0",
+  "description": "",
+  "license": "ISC",
+  "author": "Ashok Coudhary",
+  "type": "commonjs",
+  "main": "server.js",
+  "scripts": {
+    "test": "hello"
+  }
+}
