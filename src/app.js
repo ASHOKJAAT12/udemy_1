@@ -19,4 +19,10 @@ app.use(express.urlencoded({
 }))
 app.use(express.static("public"))
 
+
+
+
+import userRouter from './routers/user.route.js';
+
+app.use("/api/v1/users", userRouter);
 export {app}
