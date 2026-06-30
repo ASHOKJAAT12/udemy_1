@@ -126,8 +126,40 @@ const logoutUser = asyncHandler ( async ( req, res)=> {
         new ApiResponse(200,{},"User logout successfully.")
     )
 })
+
+const changePassword = asyncHandler ( async ( req, res ) => {
+    const { oldPassword, newPassword } = req.body || {};
+
+    if ( !oldPassword && !newPassword ) {
+        throw new ApiError(400,"all feilds are required.");
+    }
+
+    const user = await User.findById(req.user?._id);
+
+    if ( !user ) {
+        throw new ApiError(401,"user can not find!")
+    }
+
+    const isPassword = await user.isPasswordCorrect(oldPassword);
+
+    if ( !isPassword ) {
+        throw new ApiError(400,"old password is worng.");
+    }
+
+
+    user.password = newPassword;
+    await user.save({validateBeforeSave:false});
+     
+    return res
+    .status(200)
+    .json(
+        new ApiResponse(200,{},"user successfully cahange password.")
+    )
+    
+})
 export { 
     registerUser,
     loginUser,
-    logoutUser
+    logoutUser,
+    changePassword
 };
