@@ -157,9 +157,37 @@ const changePassword = asyncHandler ( async ( req, res ) => {
     )
     
 })
+
+const changeUserDetails = asyncHandler ( async (req, res) => {
+    const { username, email } = req.body || {};
+
+    if ( !username || !email ) {
+        throw new ApiError(400,"are feild are required.");
+    }
+
+    await User.findByIdAndUpdate(
+        req.user?._id,
+        {
+            $set: {
+                username: username,
+                emial: email
+            }
+        },
+        {
+            new: true
+        }
+    )
+
+    return res
+    .status(200)
+    .json(
+        new ApiResponse(200,{},"user details are updates.")
+    )
+})
 export { 
     registerUser,
     loginUser,
     logoutUser,
-    changePassword
+    changePassword,
+    changeUserDetails
 };
