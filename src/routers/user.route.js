@@ -13,7 +13,6 @@ router.route("/login").post(loginUser);
 router .route("/logout").post(logoutUser);
 router .route("/change-password").post(changePassword);
 router .route("/change-user-detail").post(changeUserDetails);
-router .route("/change-user-detail").post(changeUserDetails);
 
 
 export default router;
