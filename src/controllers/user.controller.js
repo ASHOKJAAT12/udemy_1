@@ -184,10 +184,42 @@ const changeUserDetails = asyncHandler ( async (req, res) => {
         new ApiResponse(200,{},"user details are updates.")
     )
 })
+
+const changeAvatar = asyncHandler (async ( req ,res ) => {
+    const avatarLocalPath = req.files?.path;
+
+    if ( !avatarLocalPath ) {
+        throw new ApiError(400,"avatar is missing.");
+    }
+
+    const currentUser = await User.findById(req.user?._id);
+
+    const deleteFromCloudinary = await deleteFromCloudinary(currentUser.avatar.split("/").pop().split(".")[0]);
+
+    const avatar = await uploadOnCloudinary(avatarLocalPath);
+    const user = await User.findByIdAndUpdate(
+        req.user?._id,
+        {
+            $set: {
+                avatar: avatar.url
+            }
+        },
+        {
+            new: true
+        }
+    ).select("-password");
+
+    return res
+    .status(200)
+    .json(
+        new ApiResponse(200,user,"Avatar is update successfully.")
+    )
+})
 export { 
     registerUser,
     loginUser,
     logoutUser,
     changePassword,
-    changeUserDetails
+    changeUserDetails,
+    changeAvatar
 };
